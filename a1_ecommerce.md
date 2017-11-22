@@ -16,7 +16,6 @@ Your eCommerce business needs to keep track of products and their prices. The pr
 }
 ```
 
-
 ```
 # department
 
@@ -25,7 +24,6 @@ Your eCommerce business needs to keep track of products and their prices. The pr
   name: string
 }
 ```
-
 
 ```
 # customer
@@ -63,3 +61,30 @@ Your eCommerce business needs to keep track of products and their prices. The pr
   name: string
 }
 ```
+
+```
+# transaction_item
+
+{
+  id: integer,                | indexed and must be unique
+  product_id: integer,
+  product_price: number,
+  qty: integer
+  transaction_id: integer
+}
+```
+
+```
+# transaction
+
+{
+  id: integer,                | indexed and must be unique
+  date: date
+  customer_id: integer
+  transaction_item_ids: []
+  subtotal: number
+  taxes_and_crap: number
+  total: number
+}
+```
+
