@@ -4,6 +4,8 @@ You're building an application that requires user login. Once logged in the user
 
 ## Soft Schema
 ```
+# user
+
 {
   id: integer,             | indexed and must be unique
   email: string,           | must be unique. must have @ symbol.
@@ -16,13 +18,29 @@ You're building an application that requires user login. Once logged in the user
     phone number: string,  | must have 10 digits. all numbers.
     location: {
       city: string,        |
-      state: string,       | derived from other selection table
-      country: string,     | derived from other selection table
+      state_id: integer,   |
     }
   }
   show_stats: boolean,     | default set to true
 }
 ```
 
+```
+# state
 
+{
+  id: integer,             | indexed and must be unique
+  name: string,            | must have >= 1 char
+}
+```
+
+```
+# country
+
+{
+  id: integer,             | indexed and must be unique
+  name: string,            | must have >= 1 char
+  country_id: integer      |
+}
+```
 
