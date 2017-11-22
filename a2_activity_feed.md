@@ -1,6 +1,15 @@
 ## Scenario
 
-You're building an activity feed for a social media site. The feed must display a chronological list of activities for the current user's friends. These activities could potentially be any action performed on the site including uploading a photo, changing their profile, friending another user, commenting, liking etc... Further, you only want to display activities for users that the current user interacts with frequently.
+You're building an activity feed for a social media site. The feed must display a chronological list of activities for the current user's friends. These activities could potentially be any action performed on the site including:
+
+* uploading a photo
+* changing their profile
+* friending another user
+* commenting
+* liking
+* etc...
+
+Further, you only want to display activities for users that the current user interacts with frequently.
 
 ## Schemas
 
