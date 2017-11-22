@@ -21,14 +21,32 @@ grade
 ```
 
 ```
+# session
+
+{
+  id: integer,                | indexed and must be unique
+  name: string                | ex: fall, spring, summer
+}
+```
+
+```
+# semester
+
+{
+  id: integer,                | indexed and must be unique
+  year: integer
+  session_id: integer
+}
+```
+
+```
 # exam
 
 {
   id: integer,                | indexed and must be unique
-  name: string
-  class_id: integer
-  student_id: integer
-  grade: integer
+  name: string,
+  enrollment_id,
+  grade: integer,
   date: date
 }
 ```
