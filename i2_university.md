@@ -20,3 +20,15 @@ grade
 }
 ```
 
+```
+# exam
+
+{
+  id: integer,                | indexed and must be unique
+  name: string
+  class_id: integer
+  student_id: integer
+  grade: integer
+  date: date
+}
+```
