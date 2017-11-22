@@ -47,12 +47,24 @@ You're building a backend for a university that requires students to be able to 
 ```
 
 ```
+# enrollment
+
+{
+  id: integer,                | indexed and must be unique
+  student_id: integer,
+  class_id: integer,
+  semester_id: integer
+
+}
+```
+
+```
 # exam
 
 {
   id: integer,                | indexed and must be unique
   name: string,
-  enrollment_id,
+  enrollment_id: integer,
   grade: integer,
   date: date
 }
