@@ -2,7 +2,9 @@ You're building an application that requires user login. Once logged in the user
 
 * id: integer
 * email: string
+  must contain @
 * password: password
+  must be at least 8 characters and include letters and numbers
 * name: string
 * bio: text
 * stats: document
