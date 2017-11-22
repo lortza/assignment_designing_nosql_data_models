@@ -55,5 +55,24 @@ Further, you only want to display activities for users that the current user int
 }
 ```
 
+```
+# activity
 
+{
+  id: integer,                | indexed and must be unique
+  type_id: integer,
+  date: date,
+  user_id: integer,
+  description: varchar
+}
+```
 
+```
+# activity_type
+
+{
+  id: integer,                | indexed and must be unique
+  name: string                | set list, ex: photo, status,
+
+}
+```
