@@ -1,0 +1,105 @@
+# AGGREGATES
+
+# from http://no.sqlzoo.net/wiki/AGGREGATE_Tutorial#First_and_last_country_by_continent
+
+# 1. Give the name and the per capita GDP for those countries with a population of at least 200 million.
+db.world.aggregate([
+  {$match: {population: {$gte: 200000000} }},
+  {$project: {
+    _id:0,
+    name:1,
+    "per capita GDP": {$divide: ['$gdp', '$population']} }
+  }
+]);
+
+# 2. Give the name and the population density of all countries in South America.
+db.world.aggregate([
+  {$match: {
+    continent: 'South America',
+    area: {$ne: 0}
+  }},
+  {$project: {
+  _id:0,
+  name:1,
+  density: {$divide: ['$population', '$area']}
+  }}
+]);
+
+# 3. Give the name and the population density of all countries with name after V in the alphabet. Note that because Vatican City (with area 0) is in Europe you will get a divide by zero error unless you filter first.
+db.world.aggregate([
+  {$match: {
+    name: {$gte: 'V'},
+    area: {$ne: 0}
+  }},
+  {$project: {
+  _id:0,
+  name:1,
+  density: {$divide: ['$population', '$area']}
+  }}
+]);
+
+# 4. Show the name and population in millions for the countries of the continent South America. Divide the population by 1000000 to get population in millions.
+db.world.aggregate([
+  {$match: {
+    continent: 'South America'
+  }},
+  {$project: {
+    _id:0,
+    name:1,
+    population: {$divide: ['$population', 1000000]}
+  }}
+]);
+
+
+# 5. Show the name and population density for France, Germany, and Italy
+db.world.aggregate([
+  {$match: {
+    name: {$in: ['France', 'Germany', 'Italy']}
+  }},
+  {$project: {
+    _id:0,
+    name:1,
+    'population density': {$divide: ['$population', '$area']}
+  }}
+]);
+
+
+# 6. Order the continents by area from most to least.
+db.world.aggregate([
+  {$group: {
+    _id: '$continent',
+    area: {$sum: '$area'}
+  }},
+  {$sort:{
+    area: -1
+  }},
+  {$project:{
+    _id:0,
+    area:1
+  }}
+]);
+
+# 7. Show the only two continents with total area greater than 25000000 and then sort from largest to smallest.
+db.world.aggregate([
+  # get the total area of all countries in a continent
+  {$group: {
+    # reset the id field to be the continent name field
+    _id: '$continent',
+    area: {$sum: '$area'}
+  }},
+  # select only those continents with an area over > 25000000
+  {$match: {
+    area: {$gt: 25000000}
+  }},
+  # sort the results by continent area
+  {$sort: {
+    area: -1
+  }},
+  # display the output
+  {$project: {
+    _id:1, # the continent name
+    area:1 # the calculated area
+  }}
+])
+
+
