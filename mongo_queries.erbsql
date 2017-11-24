@@ -102,4 +102,26 @@ db.world.aggregate([
   }}
 ])
 
+# 8. For each continent show the first and last country alphabetically like this:
+# { "_id" : "Africa", "from" : "Algeria", "to" : "Zimbabwe" }
+# { "_id" : "Asia", "from" : "Afghanistan", "to" : "Yemen" }
+# ...
+# { "_id" : "South America", "from" : "Argentina", "to" : "Venezuela" }
+db.world.aggregate([
+  {$sort: {
+    continent: -1,
+    name: 1
+  }},
+  {$group: {
+    _id: '$continent',
+    from: {$first: "$name"},
+    to: {$last: "$name"}
+  }},
+  {$project: {
+    _id: 1,
+    from: 1,
+    to: 1
+  }}
+])
+
 
