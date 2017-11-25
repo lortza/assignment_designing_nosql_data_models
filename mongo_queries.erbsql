@@ -108,20 +108,50 @@ db.world.aggregate([
 # ...
 # { "_id" : "South America", "from" : "Argentina", "to" : "Venezuela" }
 db.world.aggregate([
-  {$sort: {
+  {$sort: { -- sort the whole list by continent, then country name
     continent: -1,
     name: 1
   }},
-  {$group: {
+  {$group: { --group by continent
     _id: '$continent',
-    from: {$first: "$name"},
-    to: {$last: "$name"}
+    from: {$first: "$name"}, -- grab the alpha first name per continent
+    to: {$last: "$name"} -- grab the alpha last name per continent
   }},
   {$project: {
     _id: 1,
     from: 1,
     to: 1
   }}
+])
+
+
+# 9. Group countries according to the first letter of the name. As shown. Only give "U" through to "Z". You will need to use the $substr function and the $push aggregate function.
+# { "_id" : "U", "list" : [ "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan" ] }
+# { "_id" : "V", "list" : [ "Vanuatu", "Vatican City", "Venezuela", "Vietnam" ] }
+db.world.aggregate([
+  {$match: {
+    name: {$gt: 'U'}
+  }},
+  {$sort:{
+    _id:1}
+  },
+  {$group: {
+    _id: {$substr:['$name',0,1]},
+    list: []
+  }},
+  {$project: {
+    _id:1,
+    list:1
+  }}
+]);
+
+
+# default query
+db.world.aggregate([
+    {$project:{_id:'$name',
+     startsWith:{$substr:['$name',0,1]}}},
+    {$match:{_id:{$gte:'U'}}},
+    {$sort:{_id:1}}
 ])
 
 
