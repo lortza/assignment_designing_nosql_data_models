@@ -129,29 +129,54 @@ db.world.aggregate([
 # { "_id" : "U", "list" : [ "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan" ] }
 # { "_id" : "V", "list" : [ "Vanuatu", "Vatican City", "Venezuela", "Vietnam" ] }
 db.world.aggregate([
-  {$match: {
+  { $match: {
     name: {$gt: 'U'}
   }},
-  {$sort:{
-    _id:1}
-  },
-  {$group: {
-    _id: {$substr:['$name',0,1]},
-    list: []
+  { $group: {
+    _id: { $substr:[ '$name', 0, 1 ] },
+    list: { $push: '$name' }
   }},
-  {$project: {
-    _id:1,
-    list:1
-  }}
+  { $sort: { _id: 1, list: -1} },
+  { $project: { _id:1, list:1 }}
 ]);
 
 
-# default query
+# 10. Combine North America and South America to America, and then list the continents by area. Biggest first.
 db.world.aggregate([
-    {$project:{_id:'$name',
-     startsWith:{$substr:['$name',0,1]}}},
-    {$match:{_id:{$gte:'U'}}},
-    {$sort:{_id:1}}
+    {$group:{
+        _id:{
+            $cond: { 
+              if: {$eq:["$continent","North America"]}, 
+              then: 'America', 
+              else: { $cond: { 
+                      if: {$eq:["$continent","South America"]},
+                      then: "America",
+                      else: "$continent"
+                    }}
+            }
+        },
+        area:{$sum: "$area"}
+    }},
+    {$sort:{
+        area: -1
+    }},
+    {$project:{
+        _id:1,
+        area:1
+    }}
+]);
+
+
+
+# 11. Show the name and the continent for countries beginning with N - but replace the continent Oceania with Australasia.
+db.world.aggregate([
+    {$match:{
+        name:{$regex:"^N"}
+    }},
+
+    { $project:{ 
+      _id:0, 
+      name:1, 
+      continent: { $cond: { if: { $eq: ['$continent', 'Oceania'] }, then: 'Australasia', else: '$continent' } }
+    }}
 ])
-
-
